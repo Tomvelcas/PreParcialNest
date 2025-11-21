@@ -1,0 +1,25 @@
+Formato: <metodo> <URI> <representacion> - <nombreDTOentrada> - <nombreDTOsalida>
+
+1) POST /estudiantes application/json - CreateEstudianteDto - Estudiante
+   CreateEstudianteDto: cedula (int), nombre (string), semestre (int), programa (string), promedio (number). Regla negocio: promedio > 3.2 y semestre >= 4.
+
+2) DELETE /estudiantes/:id application/json - (id path param) - void
+   Sin cuerpo; solo path param id (number). Regla negocio: no eliminar si tiene proyectos con estado < 4.
+
+3) POST /profesores application/json - CreateProfesorDto - Profesor
+   CreateProfesorDto: cedula (int), nombre (string), departamento (string), extension (int 5 dígitos), esParEvaluador (boolean).
+
+4) POST /profesores/:id/asignar-evaluador application/json - AsignarEvaluadorDto - Profesor
+   AsignarEvaluadorDto: profesorId (int) (o tomado del path). Regla negocio: solo si tiene < 3 evaluaciones activas.
+
+5) POST /proyectos application/json - CreateProyectoDto - Proyecto
+   CreateProyectoDto: titulo (string, min 16), area (string), presupuesto (int > 0), notaFinal? (int 0-5), estado? (int 0-4), fechaInicio (string), fechaFin? (string), liderId (int), mentorId (int). Reglas: presupuesto > 0, título > 15 chars, líder y mentor deben existir.
+
+6) PATCH /proyectos/:id/avanzar application/json - (id path param) - Proyecto
+   Sin cuerpo; path param id (number). Regla: estado entre 0 y 4, incrementa y valida máximo.
+
+7) GET /proyectos/:id/estudiantes application/json - (id path param) - Estudiante[]
+   Devuelve estudiantes relacionados (actualmente el líder).
+
+8) POST /evaluaciones application/json - CreateEvaluacionDto - Evaluacion
+   CreateEvaluacionDto: calificacion (int 0-5), activa? (boolean), proyectoId (int), evaluadorId (int). Reglas: evaluador != mentor del proyecto.
